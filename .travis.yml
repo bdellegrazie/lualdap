@@ -1,0 +1,29 @@
+# .travis.yaml
+
+language: python
+dist: trusty
+sudo: required
+
+env:
+  - LUA="lua=5.1"
+  - LUA="lua=5.2"
+  #- LUA="lua=5.3"
+  #- LUA="luajit=2.0"
+  #- LUA="luajit=2.1"
+
+before_install:
+  - sudo apt-get -qq update
+  - cat tests/slapd.debconf | sudo debconf-set-selections
+  - sudo apt-get install -y slapd ldap-utils libldap-dev
+  - pip install hererocks
+  - hererocks lua_install -r^ --$LUA
+  - source lua_install/bin/activate
+
+install:
+  - ldapadd -x -D cn=admin,dc=example,dc=com -w admin -f tests/test.ldif
+  #- luarocks install luacheck
+
+script:
+  #- luacheck *.lua spec
+  - luarocks make --local rockspecs/lualdap/lualdap-1.2.3-1.rockspec
+  - lua tests/test.lua localhost dc=example,dc=com cn=admin,dc=example,dc=com admin
