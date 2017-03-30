@@ -1,0 +1,35 @@
+-   repo: git://github.com/pre-commit/pre-commit-hooks
+    sha: 5bf6c09bfa1297d3692cadd621ef95f1284e33c0
+    hooks:
+    -   id: trailing-whitespace
+        files: \.(c|h|js|json|lua|md|py|sh|txt|yaml|yml)$
+    -   id: check-case-conflict
+    -   id: end-of-file-fixer
+-   repo: local
+    hooks:
+    -   id: travis-lint
+        name: Travis Lint
+        entry: bundle
+        language: system
+        files: ^\.travis\.yml$
+        args:
+        - exec
+        - travis
+        - lint
+        - --no-interactive
+        - --skip-version-check
+        - --skip-completion-check
+        - --exit-code
+    -   id: lua-check
+        name: Lua Check
+        entry: luacheck
+        language: system
+        files: \.(lua|rockspec)$
+    -   id: luarocks-lint
+        name: Luarocks Lint
+        entry: luarocks
+        language: system
+        files: \.(rockspec)$
+        args:
+        - --local
+        - lint
