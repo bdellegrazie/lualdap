@@ -27,7 +27,7 @@ function print_attrs (dn, attrs)
 		if tv == "string" then
 			io.write (values)
 		elseif tv == "table" then
-			local n = table.getn (values)
+			local n = #values
 			for i = 1, n-1 do
 				io.write (values[i]..",")
 			end
@@ -77,7 +77,7 @@ function test_object (obj, objmethods)
 	-- trying to set metatable.
 	assert2 (false, pcall (setmetatable, ENV, {}))
 	-- checking existence of object's methods.
-	for i = 1, table.getn (objmethods) do
+	for i = 1, #objmethods do
 		local method = obj[objmethods[i]]
 		assert2 ("function", type(method))
 		assert2 (false, pcall (method), "no 'self' parameter accepted")
@@ -128,7 +128,7 @@ end
 -- checks return value which should be a function AND also its return value.
 ---------------------------------------------------------------------
 function check_future (ret, method, ...)
-	local ok, f = pcall (method, unpack (arg))
+	local ok, f = pcall (method, ...)
 	assert (ok, f)
 	assert2 ("function", type(f))
 	assert2 (ret, f())
@@ -377,7 +377,7 @@ tests = {
 -- Main
 ---------------------------------------------------------------------
 
-if table.getn(arg) < 1 then
+if #arg < 1 then
 	print (string.format ("Usage %s host[:port] base [who [password]]", arg[0]))
 	os.exit()
 end
@@ -390,7 +390,7 @@ PASSWORD = arg[4]
 require"lualdap"
 assert (type(lualdap)=="table", "couldn't load LDAP library")
 
-for i = 1, table.getn (tests) do
+for i = 1, #tests do
 	local t = tests[i]
 	io.write (t[1].." ...")
 	t[2] ()
