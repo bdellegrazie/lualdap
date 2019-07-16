@@ -1,3 +1,7 @@
+# No longer maintained
+
+Please see the original fork: [lualdap/lualdap](https://github.com/lualdap/lualdap) - this *is* maintained
+
 LuaLDAP
 (https://github.com/bdellegrazie/lualdap/)
 
